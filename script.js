@@ -38,7 +38,7 @@ let displayValue = document.querySelector(".currentOperand")
     
 //     };
 
- 
+ //Append numbers into display
 let numberButtons = Array.from(document.querySelectorAll(".operands"));
 for (i=0; i < numberButtons.length; i++){
     numberButtons[i].addEventListener("click", (e) =>{
@@ -47,8 +47,24 @@ for (i=0; i < numberButtons.length; i++){
         if (e.target.value == operandList[j]){
             displayValue.innerHTML += `${operandList[j]}`;
         }
-}});
-}
-
+}})
+};
+//Append operators into display
 let operatorButtons = Array.from(document.querySelectorAll(".operator"));
+for (i=0; i<operatorButtons.length;i++){
+    operatorButtons[i].addEventListener("click", (e)=>{
+        let operatorList = ["+","-", "x","÷"];
+        for (j=0; j < operatorList.length; j++){
+            if (e.target.value == operatorList[j]){
+                displayValue.innerHTML += `&nbsp;${operatorList[j]}&nbsp;`;
+            }
+
+    }})
+};
+
+let number1 = displayValue;
+if (numberButtons.clicked == true && operatorButtons.clicked == true){
+    let number2 = displayValue;
+    displayValue = operate(number1,number2,this.operatorButtons);
+};
 
