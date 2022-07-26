@@ -30,13 +30,20 @@ let operate = function(a,b,operator){
 };
 
 
+let displayValue = document.querySelector(".currentOperand");
 
-let displayValue = document.querySelector(".currentOperand")
-
-
-// let displayNumber = function(e){
+let deleteButton = document.querySelector(".delete");
+deleteButton.addEventListener("click", () => {
+    let deletedString = displayValue.innerHTML.split("").slice(0,-1).join("");
+    return displayValue.innerHTML = `${deletedString}`;
     
-//     };
+});
+
+let clearButton = document.querySelector(".clear");
+clearButton.addEventListener("click", ()=>{
+    return displayValue.innerHTML = " ";
+})
+
 
  //Append numbers into display
 let numberButtons = Array.from(document.querySelectorAll(".operands"));
@@ -62,9 +69,13 @@ for (i=0; i<operatorButtons.length;i++){
     }})
 };
 
-let number1 = displayValue;
-if (numberButtons.clicked == true && operatorButtons.clicked == true){
-    let number2 = displayValue;
-    displayValue = operate(number1,number2,this.operatorButtons);
-};
+
+let equalButton = document.querySelector(".equal");
+equalButton.addEventListener("click", (e)=>{
+    if(e.buttons == 1){
+        
+        let result = operate(parseInt(tempArray[0]), parseInt(tempArray[2]), parseInt(tempArray[1]));
+        return result;
+    }
+})
 
