@@ -110,7 +110,7 @@ for (i=0; i<operatorButtons.length;i++){
                 if (e.target.value == operatorList[j]){
                     processedString.filter(Boolean);
                    
-                    upperDisplayValue.innerHTML= `${operate(parseInt(processedString[0]),parseInt(displayValue.innerHTML), processedString[1])} ${operatorList[j]}`;
+                    upperDisplayValue.innerHTML= `${operate(Number(processedString[0]),Number(displayValue.innerHTML), processedString[1])} ${operatorList[j]}`;
                     displayValue.innerHTML = " ";
         }
     }
@@ -154,19 +154,22 @@ equalButton.addEventListener("click", (e)=>{
                 if (tempArray[i]== "+" || tempArray[i]== "-" ||tempArray[i]== "x" || tempArray[i]== "÷"){
                     operator = tempArray[i];
                     
+                    }
+                    
                 }
                 
             }
         
         
         // for the case where calculator tries to divide by 0
-        if (parseInt(displayValue.innerHTML)!= 0 && operator!="÷"){
+       
+        if (Number(displayValue.innerHTML)!= 0){
             upperDisplayValue.innerHTML = upperDisplayValue.innerHTML + displayValue.innerHTML + " = " ;
-            return displayValue.innerHTML = `${operate(parseInt(tempArray[0]),parseInt(displayValue.innerHTML),operator)}`;
+            return displayValue.innerHTML = `${operate(Number(tempArray[0]),Number(displayValue.innerHTML),operator)}`;
         }
-        else{
+        else if(Number(displayValue.innerHTML) == 0 && operator =="÷"){
             alert("No number can be divided by 0! Please try a different number!");
-        }
+       
         }
         
     });
