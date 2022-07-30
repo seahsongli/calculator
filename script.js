@@ -1,8 +1,8 @@
 // To do list:
 // Prevent equal when only 1 num [Done!!!]
-// Del button should be able to amend upper display
-// Do not allow 0 to be at the start
-// Prevent division by 0
+// Del button should be able to amend upper display [Done!!]
+// Do not allow 0 to be at the start [Done!!]
+// Prevent division by 0 [Done!!]
 // Allow negative number
 // After pressing equal and pressing operator should give correct results.
 const add = function(a,b){
@@ -23,7 +23,6 @@ const multiply = function(a,b){
 const divide = function(a,b){
     let quotient = a / b;
     return quotient;
-
 };
 
 
@@ -54,15 +53,20 @@ let upperDisplayValue = document.querySelector(".previousOperand");
 
 let deleteButton = document.querySelector(".delete");
 deleteButton.addEventListener("click", () => {
-    let deletedString = displayValue.innerHTML.split("").slice(0,-1).join("");
-    return displayValue.innerHTML = `${deletedString}`;
-    
+    if (displayValue.innerHTML!= ""){
+        let deletedString = displayValue.innerHTML.split("").slice(0,-1).join("");
+        return displayValue.innerHTML = `${deletedString}`;
+    }
+    else{
+        let deletedString = upperDisplayValue.innerHTML.split("").slice(0,-1).join("");
+        return upperDisplayValue.innerHTML = `${deletedString}`;
+    }
 });
 
 let clearButton = document.querySelector(".clear");
 clearButton.addEventListener("click", ()=>{
     upperDisplayValue.innerHTML = " "
-    return displayValue.innerHTML = "";
+    return displayValue.innerHTML = "0";
 });
 
 
@@ -72,11 +76,19 @@ let numberButtons = Array.from(document.querySelectorAll(".operands"));
 for (i=0; i < numberButtons.length; i++){
     numberButtons[i].addEventListener("click", (e) =>{
     let operandList = [".","(",")",0,1,2,3,4,5,6,7,8,9];
+    let tempArray = displayValue.innerHTML.split("");
+    if (e.target.value == 0 && tempArray[0] == "0"){
+        return;
+    }
     for (j=0; j < operandList.length; j++){
-     
-            if (e.target.value == operandList[j]){
+            if (e.target.value == operandList[j] && tempArray[0]!= "0"){
                 displayValue.innerHTML += `${operandList[j]}`;
             }
+            
+            else if (e.target.value == operandList[j] && tempArray == "0"){
+                displayValue.innerHTML = `${operandList[j]}`;
+            }
+                
             }
         })
     };
@@ -135,8 +147,14 @@ equalButton.addEventListener("click", (e)=>{
             }
         
         
-        upperDisplayValue.innerHTML = upperDisplayValue.innerHTML + displayValue.innerHTML + " = " 
-        return displayValue.innerHTML = `${operate(parseInt(tempArray[0]),parseInt(displayValue.innerHTML),operator)}`;
+        
+        if (parseInt(displayValue.innerHTML)!= 0){
+            upperDisplayValue.innerHTML = upperDisplayValue.innerHTML + displayValue.innerHTML + " = " ;
+            return displayValue.innerHTML = `${operate(parseInt(tempArray[0]),parseInt(displayValue.innerHTML),operator)}`;
+        }
+        else{
+            alert("No number can be divided by 0! Please try a different number!");
+        }
         }
         
     })
