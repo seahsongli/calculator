@@ -1,3 +1,10 @@
+// To do list:
+// Prevent equal when only 1 num [Done!!!]
+// Del button should be able to amend upper display
+// Do not allow 0 to be at the start
+// Prevent division by 0
+// Allow negative number
+// After pressing equal and pressing operator should give correct results.
 const add = function(a,b){
     let sum = a + b;
     return sum; 
@@ -66,35 +73,20 @@ for (i=0; i < numberButtons.length; i++){
     numberButtons[i].addEventListener("click", (e) =>{
     let operandList = [".","(",")",0,1,2,3,4,5,6,7,8,9];
     for (j=0; j < operandList.length; j++){
-        // let processedString = upperDisplayValue.innerHTML.split("&nbsp;")
-       
-        // if ((processedString.find(string => string == "+"||string == "-" || string == "x" || string == "÷")) && e.target.value == operandList[j]){
-        //     displayValue.innerHTML += `${operandList[j]}`;
-        // }
+     
             if (e.target.value == operandList[j]){
                 displayValue.innerHTML += `${operandList[j]}`;
             }
             }
         })
     };
-    //     if (displayValue != "" && e.target.value == operandList[j]){
-    //         displayValue.innerHTML += `${operandList[j]}`;
-    //     }
-    //     else if (e.target.value == operandList[j]){
-    //         let processedString = upperDisplayValue.innerHTML.split("&nbsp;")
-    //         if ((processedString.find(string => string == "+"||string == "-" || string == "x" || string == "÷")) && displayValue.innerHTML != ""){
-    //             displayValue.innerHTML = "";
-    //             displayValue.innerHTML =  `${operandList[j]}`;
-    //     }
-    //     }
-    // }})
-// };
+
 
 //Append operators into display
 let operatorButtons = Array.from(document.querySelectorAll(".operator"));
 for (i=0; i<operatorButtons.length;i++){
     operatorButtons[i].addEventListener("click", (e)=>{
-        let processedString = upperDisplayValue.innerHTML.split(" ")
+        let processedString = upperDisplayValue.innerHTML.split(" ");
         let operatorList = ["+","-","x","÷"];
         if ((processedString.find(string => string == "+"||string == "-" || string == "x" || string == "÷"))){
             for (j=0; j < operatorList.length; j++){
@@ -130,16 +122,22 @@ let equalButton = document.querySelector(".equal");
 let operator;
 equalButton.addEventListener("click", (e)=>{
         let tempArray = upperDisplayValue.innerHTML.split(" ");
-        for (i=0; i<tempArray.length;i++){
-            if (tempArray[i]== "+" || tempArray[i]== "-" ||tempArray[i]== "x" || tempArray[i]== "÷"){
-                operator = tempArray[i];
+        if (tempArray.length < 2 || tempArray.find(string=> string == "=" ) || displayValue.innerHTML==""|| upperDisplayValue.innerHTML=="") {
+            return;
+        }
+        else{
+            for (i=0; i<tempArray.length;i++){
+                if (tempArray[i]== "+" || tempArray[i]== "-" ||tempArray[i]== "x" || tempArray[i]== "÷"){
+                    operator = tempArray[i];
+                    
+                }
                 
             }
-            
-        }
-        upperDisplayValue.innerHTML = upperDisplayValue.innerHTML + displayValue.innerHTML + " =" 
-        return displayValue.innerHTML = `${operate(parseInt(tempArray[0]),parseInt(displayValue.innerHTML),operator)}`;
         
+        
+        upperDisplayValue.innerHTML = upperDisplayValue.innerHTML + displayValue.innerHTML + " = " 
+        return displayValue.innerHTML = `${operate(parseInt(tempArray[0]),parseInt(displayValue.innerHTML),operator)}`;
+        }
         
     })
 
