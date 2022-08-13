@@ -5,6 +5,8 @@
 // Prevent division by 0 [Done!!]
 // Allow negative number [Done!!]
 // After pressing equal and pressing operator should give correct results. [Done!!]
+// Allow keyboard keys 
+// Find two buttons to substitute the keys
 const add = function(a,b){
     let sum = a + b;
     return sum; 
@@ -71,7 +73,7 @@ let numberButtons = Array.from(document.querySelectorAll(".operands"));
 
 for (i=0; i < numberButtons.length; i++){
     numberButtons[i].addEventListener("click", (e) =>{
-    let operandList = [".","(",")",0,1,2,3,4,5,6,7,8,9];
+    let operandList = [".","%","√",0,1,2,3,4,5,6,7,8,9];
     let tempArray = displayValue.innerHTML.split("");
 // if button clicked is 0 and there is only a 0 in lower display, then we do not allow addition of 0s.
     if (e.target.value == 0 && tempArray[0] == "0"){
@@ -96,6 +98,8 @@ let operatorButtons = Array.from(document.querySelectorAll(".operator"));
 for (i=0; i<operatorButtons.length;i++){
     operatorButtons[i].addEventListener("click", (e)=>{
         let processedString = upperDisplayValue.innerHTML.split(" ");
+        let upperSqrtChecker = upperDisplayValue.innerHTML.split("");
+        let sqrtChecker = displayValue.innerHTML.split("");
         let operatorList = ["+","-","x","÷"];
         // To allow input of negative numbers
         if (e.target.value == "-" && displayValue.innerHTML == ""){
@@ -109,15 +113,58 @@ for (i=0; i<operatorButtons.length;i++){
             for (j=0; j < operatorList.length; j++){
                 if (e.target.value == operatorList[j]){
                     processedString.filter(Boolean);
-                   
+                    sqrtChecker.filter(Boolean);
+                    upperSqrtChecker.filter(Boolean);
+                    //In the event there is a square root.
+                    if (upperSqrtChecker.find(string=> string == "√" ||sqrtChecker.find(string=> string == "√" ))){
+                        if(upperSqrtChecker.find(string=> string == "√") && sqrtChecker.find(string=> string == "√")) {
+                            upperDisplayValue.innerHTML = `${operate(Math.sqrt(Number(upperSqrtChecker[upperSqrtChecker.indexOf("√")+1])),Math.sqrt(Number(sqrtChecker[sqrtChecker.indexOf("√")+1])), processedString[1])} ${operatorList[j]}`; 
+                            return displayValue.innerHTML = " "
+                        }
+                        else if (upperSqrtChecker.find(string=> string == "√")){
+                            upperDisplayValue.innerHTML = `${operate(Math.sqrt(Number(upperSqrtChecker[upperSqrtChecker.indexOf("√")+1])),Number(displayValue.innerHTML), processedString[1])} ${operatorList[j]}` ;
+                            return displayValue.innerHTML = " ";
+                        }
+                        
+                        else {
+                            upperDisplayValue.innerHTML = `${operate(Math.sqrt(Number(sqrtChecker[sqrtChecker.indexOf("√")+1])),Number(processedString[0]), processedString[1])} ${operatorList[j]}}`;
+                            displayValue.innerHTML = " ";
+                        }
+                        
+                        
+                    }
+                    //In the event there is a %.
+                    else if (sqrtChecker.find(string=> string == "%") || upperSqrtChecker.find(string=> string == "%")){
+                        if (sqrtChecker.find(string=> string == "%") && upperSqrtChecker.find(string=> string == "%")){
+                            upperDisplayValue.innerHTML = `${operate((Number(upperSqrtChecker[upperSqrtChecker.indexOf("%")-1])/100),Number(sqrtChecker[sqrtChecker.indexOf("%")-1])/100,processedString[1])} ${operatorList[j]}`;
+                            return displayValue.innerHTML = " ";
+                        }
+                        else if (upperSqrtChecker.find(string=> string == "%")){
+                            upperDisplayValue.innerHTML = `${operate((Number(upperSqrtChecker[upperSqrtChecker.indexOf("%")-1])/100),Number(displayValue.innerHTML),processedString[1])} ${operatorList[j]}`;
+                            return displayValue.innerHTML= "" ;
+                        }
+                        
+        
+                        else {
+                            upperDisplayValue.innerHTML = `${operate((Number(sqrtChecker[sqrtChecker.indexOf("%")-1])/100),Number(processedString[0]),processedString[1])} ${operatorList[j]}`;
+                            return displayValue.innerHTML= " ";
+                        }
+                        
+                    }
+                    }
+                    else{
                     upperDisplayValue.innerHTML= `${operate(Number(processedString[0]),Number(displayValue.innerHTML), processedString[1])} ${operatorList[j]}`;
                     displayValue.innerHTML = " ";
+                    }
+                    
+                    
         }
     }
 
-}       
+      
 //For the case where after pressing = and obtaining a result, allows continuation of calculation.
         else if (upperDisplayValue.innerHTML!=""  && processedString.find(string=> string == "=")){
+            
             upperDisplayValue.innerHTML = displayValue.innerHTML;
             for (j=0; j < operatorList.length; j++){
             if (e.target.value == operatorList[j]){
@@ -137,14 +184,17 @@ for (i=0; i<operatorButtons.length;i++){
     
         }
 }
-    return displayValue.innerHTML;})
-};
+    return displayValue.innerHTML;
+
+})};
 
 
 let equalButton = document.querySelector(".equal");
 let operator;
 equalButton.addEventListener("click", (e)=>{
         let tempArray = upperDisplayValue.innerHTML.split(" ");
+        let upperSqrtChecker = upperDisplayValue.innerHTML.split("");
+        let sqrtChecker = displayValue.innerHTML.split("");
         //if only 1 number in display , do not allow = to be appended to display.
         if (tempArray.length < 2 || tempArray.find(string=> string == "=" ) || displayValue.innerHTML==""|| upperDisplayValue.innerHTML=="") {
             return;
@@ -164,13 +214,56 @@ equalButton.addEventListener("click", (e)=>{
         // for the case where calculator tries to divide by 0
        
         if (Number(displayValue.innerHTML)!= 0){
-            upperDisplayValue.innerHTML = upperDisplayValue.innerHTML + displayValue.innerHTML + " = " ;
-            return displayValue.innerHTML = `${operate(Number(tempArray[0]),Number(displayValue.innerHTML),operator)}`;
+                    sqrtChecker.filter(Boolean);
+                    upperSqrtChecker.filter(Boolean);
+             //In the event there is a square root.
+            if (upperSqrtChecker.find(string=> string == "√" ||sqrtChecker.find(string=> string == "√" ))){
+                if(upperSqrtChecker.find(string=> string == "√") && sqrtChecker.find(string=> string == "√")) {
+                    upperDisplayValue.innerHTML = upperDisplayValue.innerHTML + displayValue.innerHTML + " = " ;
+                    return displayValue.innerHTML = `${operate(Math.sqrt(Number(upperSqrtChecker[upperSqrtChecker.indexOf("√")+1])),Math.sqrt(Number(sqrtChecker[sqrtChecker.indexOf("√")+1])), operator)}`;
+                }
+                else if (upperSqrtChecker.find(string=> string == "√")){
+                    upperDisplayValue.innerHTML = upperDisplayValue.innerHTML + displayValue.innerHTML + " = " ;
+                    return displayValue.innerHTML = `${operate(Math.sqrt(Number(upperSqrtChecker[upperSqrtChecker.indexOf("√")+1])),Number(displayValue.innerHTML), operator)}`;
+                }
+                
+                else {
+                    upperDisplayValue.innerHTML = upperDisplayValue.innerHTML + displayValue.innerHTML + " = "
+                    displayValue.innerHTML = `${operate(Math.sqrt(Number(sqrtChecker[sqrtChecker.indexOf("√")+1])),Number(tempArray[0]), operator)}`;
+                }
+                
+                
+            }
+           //In the event there is a %.
+            else if (sqrtChecker.find(string=> string == "%") || upperSqrtChecker.find(string=> string == "%")){
+                if (sqrtChecker.find(string=> string == "%") && upperSqrtChecker.find(string=> string == "%")){
+                    upperDisplayValue.innerHTML = upperDisplayValue.innerHTML + displayValue.innerHTML + " = ";
+                    return displayValue.innerHTML= `${operate((Number(upperSqrtChecker[upperSqrtChecker.indexOf("%")-1])/100),Number(sqrtChecker[sqrtChecker.indexOf("%")-1])/100, operator)}`;
+                }
+                else if (upperSqrtChecker.find(string=> string == "%")){
+                    upperDisplayValue.innerHTML = upperDisplayValue.innerHTML + displayValue.innerHTML + " = ";
+                    return displayValue.innerHTML= `${operate((Number(upperSqrtChecker[upperSqrtChecker.indexOf("%")-1])/100),Number(displayValue.innerHTML), operator)}`;
+                }
+                
+
+                else {
+                    upperDisplayValue.innerHTML = upperDisplayValue.innerHTML + displayValue.innerHTML + " = " ;
+                    return displayValue.innerHTML= `${operate((Number(sqrtChecker[sqrtChecker.indexOf("%")-1])/100),Number(tempArray[0]), operator)}`;
+                }
+                
+            }
+           
+            else{
+                upperDisplayValue.innerHTML = upperDisplayValue.innerHTML + displayValue.innerHTML + " = " ;
+                return displayValue.innerHTML = `${operate(Number(tempArray[0]),Number(displayValue.innerHTML),operator)}`;
+            }
+            
         }
         else if(Number(displayValue.innerHTML) == 0 && operator =="÷"){
             alert("No number can be divided by 0! Please try a different number!");
        
         }
+    
         
     });
 
