@@ -70,7 +70,6 @@ clearButton.addEventListener("click", ()=>{
 
  //Append numbers into display
 let numberButtons = Array.from(document.querySelectorAll(".operands"));
-
 for (i=0; i < numberButtons.length; i++){
     numberButtons[i].addEventListener("click", (e) =>{
     let operandList = [".","%","√",0,1,2,3,4,5,6,7,8,9];
@@ -95,7 +94,7 @@ for (i=0; i < numberButtons.length; i++){
 
 //Append operators into display
 let operatorButtons = Array.from(document.querySelectorAll(".operator"));
-for (i=0; i<operatorButtons.length;i++){
+for (i=0;i<operatorButtons.length;i++){
     operatorButtons[i].addEventListener("click", (e)=>{
         let processedString = upperDisplayValue.innerHTML.split(" ");
         let upperSqrtChecker = upperDisplayValue.innerHTML.split("");
@@ -108,18 +107,19 @@ for (i=0; i<operatorButtons.length;i++){
         else if (e.target.value == "-" && displayValue.innerHTML == "0"){
             return displayValue.innerHTML = "-";
         }
+ 
 // If there is already an operator in upper display, calulate the current two numbers first, append the new operator to upper display.
-        if ((processedString.find(string => string == "+"||string == "-" || string == "x" || string == "÷") && !(processedString.find(string=> string == "=")))){
-            for (j=0; j < operatorList.length; j++){
-                if (e.target.value == operatorList[j]){
-                    processedString.filter(Boolean);
-                    sqrtChecker.filter(Boolean);
-                    upperSqrtChecker.filter(Boolean);
+        if ((processedString.find(string => string == "+"||string == "-" || string == "x" || string == "÷") && (processedString.find(string=> string == "=")=== undefined))){
+            for (j=0;j<operatorList.length;j++){
+                processedString.filter(string=> string !== " ");
+                sqrtChecker.filter(string=> string !== " ");
+                upperSqrtChecker.filter(string=> string !== " ");
+                if (e.target.value === operatorList[j]){
                     //In the event there is a square root.
-                    if (upperSqrtChecker.find(string=> string == "√" ||sqrtChecker.find(string=> string == "√" ))){
+                    if (upperSqrtChecker.find(string=>string == "√" ||sqrtChecker.find(string=> string == "√"))){
                         if(upperSqrtChecker.find(string=> string == "√") && sqrtChecker.find(string=> string == "√")) {
                             upperDisplayValue.innerHTML = `${operate(Math.sqrt(Number(upperSqrtChecker[upperSqrtChecker.indexOf("√")+1])),Math.sqrt(Number(sqrtChecker[sqrtChecker.indexOf("√")+1])), processedString[1])} ${operatorList[j]}`; 
-                            return displayValue.innerHTML = " "
+                            return displayValue.innerHTML = " ";
                         }
                         else if (upperSqrtChecker.find(string=> string == "√")){
                             upperDisplayValue.innerHTML = `${operate(Math.sqrt(Number(upperSqrtChecker[upperSqrtChecker.indexOf("√")+1])),Number(displayValue.innerHTML), processedString[1])} ${operatorList[j]}` ;
@@ -151,12 +151,12 @@ for (i=0; i<operatorButtons.length;i++){
                         }
                         
                     }
-                    }
+                    
                     else{
-                    upperDisplayValue.innerHTML= `${operate(Number(processedString[0]),Number(displayValue.innerHTML), processedString[1])} ${operatorList[j]}`;
+                    upperDisplayValue.innerHTML = `${operate(Number(processedString[0]),Number(displayValue.innerHTML), processedString[1])} ${e.target.value}`;
                     displayValue.innerHTML = " ";
                     }
-                    
+                }
                     
         }
     }
@@ -164,9 +164,8 @@ for (i=0; i<operatorButtons.length;i++){
       
 //For the case where after pressing = and obtaining a result, allows continuation of calculation.
         else if (upperDisplayValue.innerHTML!=""  && processedString.find(string=> string == "=")){
-            
             upperDisplayValue.innerHTML = displayValue.innerHTML;
-            for (j=0; j < operatorList.length; j++){
+            for (j=0;j<operatorList.length;j++){
             if (e.target.value == operatorList[j]){
                 upperDisplayValue.innerHTML = displayValue.innerHTML +  ` ${operatorList[j]}`;
                 displayValue.innerHTML = " ";
@@ -211,8 +210,6 @@ equalButton.addEventListener("click", (e)=>{
             }
         
         
-        // for the case where calculator tries to divide by 0
-       
         if (Number(displayValue.innerHTML)!= 0){
                     sqrtChecker.filter(Boolean);
                     upperSqrtChecker.filter(Boolean);
@@ -259,6 +256,7 @@ equalButton.addEventListener("click", (e)=>{
             }
             
         }
+        // for the case where calculator tries to divide by 0
         else if(Number(displayValue.innerHTML) == 0 && operator =="÷"){
             alert("No number can be divided by 0! Please try a different number!");
        
